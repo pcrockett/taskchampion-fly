@@ -1,3 +1,7 @@
+lint:
+	pre-commit run --all --show-diff-on-failure --color always
+.PHONY: lint
+
 launch: fly.toml
 	@flyctl launch --copy-config --yes
 .PHONY: launch
