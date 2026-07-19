@@ -15,13 +15,10 @@ jobs:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
-      - name: install flyctl
-        uses: pcrockett/rush-repo@c63c1ffb55357996ae5342f225e19423b8d35ebf  # v0.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
         with:
-          packages: flyctl
+          persist-credentials: false
+      - uses: pcrockett/setup-fly@db3872f3719b4ead11b0a1f58cf8cc5a49b7b0ac  # v0.1.2
       - name: flyctl deploy
         run: |
           for _ in 1 2; do
