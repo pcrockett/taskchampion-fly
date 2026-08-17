@@ -21,13 +21,17 @@ jobs:
       - uses: pcrockett/setup-fly@db3872f3719b4ead11b0a1f58cf8cc5a49b7b0ac  # v0.1.2
       - name: flyctl deploy
         run: |
+          STATUS="fail"
           for _ in 1 2; do
-            flyctl deploy \
+            if flyctl deploy \
               --app "${{ secrets.FLY_APP }}" \
               --config fly.template.toml \
-              --remote-only \
-              && break  # break from `for` loop if successful
+              --remote-only; then
+              STATUS="success"
+              break  # break from `for` loop if successful
+            fi
             sleep 60  # sleep for 1 minute if failed
           done
+          test "${STATUS}" == "success"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_DEPLOY_TOKEN }}
