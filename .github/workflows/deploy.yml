@@ -24,14 +24,16 @@ jobs:
           STATUS="fail"
           for _ in 1 2; do
             if flyctl deploy \
-              --app "${{ secrets.FLY_APP }}" \
-              --config fly.template.toml \
-              --remote-only; then
+                --app "${FLY_APP}" \
+                --config fly.template.toml \
+                --remote-only; then
               STATUS="success"
-              break  # break from `for` loop if successful
+              break  # break from retry loop
+            else
+              sleep 60  # sleep for 1 minute before retrying
             fi
-            sleep 60  # sleep for 1 minute if failed
           done
           test "${STATUS}" == "success"
         env:
+          FLY_APP: ${{ secrets.FLY_APP }}
           FLY_API_TOKEN: ${{ secrets.FLY_DEPLOY_TOKEN }}
